@@ -31,3 +31,13 @@ async def recibir_datos(request: Request):
             )
     conn.commit()
     return {"mensaje": "Datos recibidos correctamente"}
+
+
+@app.get("/api/datos")
+def obtener_datos():
+    cursor.execute("SELECT timestamp, componente, variable, valor FROM datos ORDER BY timestamp DESC LIMIT 100")
+    filas = cursor.fetchall()
+    return [
+        {"timestamp": f[0], "componente": f[1], "variable": f[2], "valor": f[3]}
+        for f in filas
+    ]
